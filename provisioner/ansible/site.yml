@@ -1,0 +1,19 @@
+---
+# This Playbook would deploy the whole hadoop cluster
+
+- hosts: admin  
+  gather_facts: yes
+  roles:
+  - role: init #rename to config-init
+
+# - hosts: all
+#   roles:
+#   - role: common
+
+# - hosts: namenodes
+#   roles:
+#   - role: namenode
+
+# - hosts: datanodes
+#   roles:
+#   - role: workernode

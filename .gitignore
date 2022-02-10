@@ -13,3 +13,5 @@ target
 gradle*
 .vagrant
 .DS_Store
+provisioner/ansible/config
+provisioner/ansible/config/**

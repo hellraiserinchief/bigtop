@@ -1,0 +1,29 @@
+# Playbook for initializing the configs
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: '{{playbook_dir}}/config/hieradata'
+    state: directory
+    mode: '0755'
+
+- name: Create hiera.yaml
+  ansible.builtin.file:
+    path: '{{playbook_dir}}/config/hiera.yml'
+    state: touch
+    mode: '0755' 
+    
+- name: Create host file
+  ansible.builtin.file:
+    path: '{{playbook_dir}}/config/hosts'
+    state: touch
+    mode: '0755'
+  
+- name: Update the /etc/hosts file with node name
+  
+  lineinfile:
+    path: "{{playbook_dir}}/config/hosts"
+    regexp: ".*\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
+    line: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
+    state: present
+    backup: yes
+  with_items: "{{groups['hadoop_machines']}}"
