@@ -1,29 +1,33 @@
 # Playbook for initializing the configs
 
-- name: Create config directory
-  ansible.builtin.file:
-    path: '{{playbook_dir}}/config/hieradata'
-    state: directory
-    mode: '0755'
+# - name: Create config directory
+#   ansible.builtin.file:
+#     path: '{{playbook_dir}}/config'
+#     state: directory
+#     mode: '0755'
 
-- name: Create hiera.yaml
-  ansible.builtin.file:
-    path: '{{playbook_dir}}/config/hiera.yml'
-    state: touch
-    mode: '0755' 
-    
-- name: Create host file
-  ansible.builtin.file:
-    path: '{{playbook_dir}}/config/hosts'
-    state: touch
-    mode: '0755'
-  
-- name: Update the /etc/hosts file with node name
-  
-  lineinfile:
-    path: "{{playbook_dir}}/config/hosts"
-    regexp: ".*\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
-    line: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
-    state: present
-    backup: yes
-  with_items: "{{groups['hadoop_machines']}}"
+# - name: Copy hiera.yaml
+#   ansible.builtin.copy:
+#     src: '{{bigtop_puppet_home}}/hiera.yaml'
+#     dest: '{{playbook_dir}}/config/hiera.yaml'   
+
+# - name: Copy hieradata
+#   ansible.builtin.copy:
+#     src: '{{bigtop_puppet_home}}/hieradata'
+#     dest: '{{playbook_dir}}/config/'
+
+- debug: 
+    var: node_list
+
+- name: Get list of allnodes
+  set_fact:
+    node_list: "{{node_list + [ item ] }}"
+  with_items: "{{groups['allnodes']}}"
+
+- debug:
+    var: node_list
+
+- name: Template site.yml for hieradata
+  ansible.builtin.template:
+    src: '{{role_path}}/templates/site.tpl'
+    dest: '{{playbook_dir}}/config/hieradata/site.yaml'

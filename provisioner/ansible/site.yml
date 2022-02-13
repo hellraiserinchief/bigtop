@@ -4,8 +4,8 @@
 - hosts: admin  
   gather_facts: yes
   roles:
-  - role: init #rename to config-init
-
+  - role: init
+  
 # - hosts: all
 #   roles:
 #   - role: common

@@ -1,11 +1,13 @@
 # The site wide list of machines nedded for hadoop deployment
 
 all:
-  hosts:
+  children:
     admin:
-      ansible_host: 99.99.1.2  
-  children:  
     allnodes:
+
+admin:
+  hosts:
+    admin-srv-1.dm.local:
 
 allnodes:
   children:
@@ -14,15 +16,12 @@ allnodes:
 
 namenodes:
   hosts:
-    namenode1:
-    ansible_host: 99.99.1.21
+    hadoop-namenode.dm.local:
 
 datanodes:
   hosts:
-  datanode1:
-    ansible_host: 99.99.1.22
-  datanode2:
-    ansible_host: 99.99.1.22  
+    hadoop-datanode-1.dm.local:
+    hadoop-datanode-2.dm.local:
 
 # [admin]
 # 99.99.1.2
