@@ -10,7 +10,7 @@ hadoop_storage_dirs:
   - /data/1
   - /data/2
 bigtop_repo_gpg_check: True
-repo_uri: "http://repos.bigtop.apache.org/releases/3.0.0/ubuntu/20.04/$(ARCH)"
+repo_uri: "http://repos.bigtop.apache.org/releases/3.0.0/ubuntu/20.04/x86_64"
 components:
   - hdfs
   - yarn
@@ -24,4 +24,5 @@ smoketest_components:
 node_list: []
 
 # Remote directory paths
-remote_bigtop_home: "/etc/bigtop"
+remote_bigtop_home: "/bigtop-home"
+remote_puppet_home: "/etc/puppet"

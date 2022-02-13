@@ -1,0 +1,23 @@
+# Playbook for bootstraping the hadoop cluster nodes
+
+- name: RSYNC Bigtop home directory to /bigtop-home
+  ansible.posix.synchronize:
+    src: '{{bigtop_home}}/'
+    dest: '{{remote_bigtop_home}}'
+  become: True
+
+- name: Puppetize the machines
+  ansible.builtin.command: '{{remote_bigtop_home}}/bigtop_toolchain/bin/puppetize.sh'
+  become: True
+
+- name: RSYNC hiera.yaml to /etc/puppet
+  ansible.posix.synchronize:
+    src: '{{playbook_dir}}/config/hiera.yaml'
+    dest: '{{remote_puppet_home}}/hiera.yaml'
+  become: True
+
+- name: RSYNC hieradata to /etc/puppet/
+  ansible.posix.synchronize:
+    src: '{{playbook_dir}}/config/hieradata/'
+    dest: '{{remote_puppet_home}}/hieradata'
+  become: True

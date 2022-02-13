@@ -1,14 +1,14 @@
 ---
 # This Playbook would deploy the whole hadoop cluster
 
-- hosts: admin  
-  gather_facts: yes
-  roles:
-  - role: init
-  
-# - hosts: all
+# - hosts: admin  
+#   gather_facts: yes
 #   roles:
-#   - role: common
+#   - role: init
+  
+- hosts: allnodes
+  roles:
+  - role: bootstrap
 
 # - hosts: namenodes
 #   roles:
