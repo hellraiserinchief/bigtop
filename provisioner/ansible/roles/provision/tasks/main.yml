@@ -1,0 +1,10 @@
+# Playbook that runs 'the puppet commands for provisioning the hadoop cluster' on hadoop nodes
+
+- name: Provisioning hadoop cluster using Bigtop's puppet manifests and modules
+  ansible.builtin.command: puppet apply --detailed-exitcodes --hiera_config=/etc/puppet/hiera.yaml --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppet/modules:/usr/share/puppet/modules:/etc/puppetlabs/code/modules /bigtop-home/bigtop-deploy/puppet/manifests
+  become: True
+  register: provision_logs
+# - debug: 
+#     var: provision_logs.stdout_lines
+- debug: 
+    var: provision_logs.stderr_lines

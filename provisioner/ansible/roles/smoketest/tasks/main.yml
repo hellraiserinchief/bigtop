@@ -1,0 +1,9 @@
+# Playbook that runs smoke test on the hadoop cluster
+
+# - name: Run smoke tests on the hadoop cluster components
+#   ansible.builtin.command: '/bigtop-home/provisioner/utils/smoke-tests.sh {{smoketest_components}}'
+#   become: True
+#   register: smoketest_logs
+
+# - debug : msg= smoketest_logs.stdout_lines
+# - debug : msg= smoketest_logs.stderr_lines
