@@ -3,7 +3,7 @@
 # - name: Run smoke tests on the hadoop cluster components
 #   ansible.builtin.command: '/bigtop-home/provisioner/utils/smoke-tests.sh {{smoketest_components}}'
 #   become: True
-#   register: smoketest_logs
+#   register: smoketest_out
 
-# - debug : msg= smoketest_logs.stdout_lines
-# - debug : msg= smoketest_logs.stderr_lines
+# - debug : msg= smoketest_out.stdout_lines
+# - debug : msg= smoketest_out.stderr_lines

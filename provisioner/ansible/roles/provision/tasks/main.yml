@@ -3,8 +3,9 @@
 - name: Provisioning hadoop cluster using Bigtop's puppet manifests and modules
   ansible.builtin.command: puppet apply --detailed-exitcodes --hiera_config=/etc/puppet/hiera.yaml --modulepath=/bigtop-home/bigtop-deploy/puppet/modules:/etc/puppet/modules:/usr/share/puppet/modules:/etc/puppetlabs/code/modules /bigtop-home/bigtop-deploy/puppet/manifests
   become: True
-  register: provision_logs
-# - debug: 
-#     var: provision_logs.stdout_lines
+  register: provision_out
+  failed_when: provision_out.rc != 0 and provision_out.rc != 2
 - debug: 
-    var: provision_logs.stderr_lines
+     var: provision_out.stdout_lines
+- debug: 
+    var: provision_out.stderr_lines

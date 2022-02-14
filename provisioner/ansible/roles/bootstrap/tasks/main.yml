@@ -9,31 +9,31 @@
 - name: Puppetize the machines
   ansible.builtin.command: '{{remote_bigtop_home}}/bigtop_toolchain/bin/puppetize.sh'
   become: True
-  register: puppetize_logs
+  register: puppetize_out
 - debug: 
-    var: puppetize_logs.stdout_lines
+    var: puppetize_out.stdout_lines
 - debug: 
-    var: puppetize_logs.stderr_lines
+    var: puppetize_out.stderr_lines
 
 - name: Install puppet modules
   ansible.builtin.command: './gradlew toolchain-puppetmodules'
   args:
     chdir: '{{remote_bigtop_home}}'
   become: True
-  register: puppetmodules_logs
+  register: puppetmodules_out
 - debug: 
-    var: puppetmodules_logs.stdout_lines
+    var: puppetmodules_out.stdout_lines
 - debug: 
-    var: puppetmodules_logs.stderr_lines  
+    var: puppetmodules_out.stderr_lines  
 
 - name: Setup env on the machines
   ansible.builtin.command: '{{remote_bigtop_home}}/provisioner/utils/setup-env-{{env_setup_distro}}.sh {{use_local_repo}}'
   become: True
-  register: setupenv_logs  
+  register: setupenv_out  
 - debug: 
-    var: setupenv_logs.stdout_lines
+    var: setupenv_out.stdout_lines
 - debug: 
-    var: setupenv_logs.stderr_lines    
+    var: setupenv_out.stderr_lines    
     
 - name: RSYNC hiera.yaml to /etc/puppet
   ansible.posix.synchronize:
