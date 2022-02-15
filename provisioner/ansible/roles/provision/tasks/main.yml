@@ -6,6 +6,6 @@
   register: provision_out
   failed_when: provision_out.rc != 0 and provision_out.rc != 2
 - debug: 
-     var: provision_out.stdout_lines
+    var: provision_out.stdout_lines
 - debug: 
     var: provision_out.stderr_lines

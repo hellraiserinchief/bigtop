@@ -15,17 +15,6 @@
 - debug: 
     var: puppetize_out.stderr_lines
 
-- name: Install puppet modules
-  ansible.builtin.command: './gradlew toolchain-puppetmodules'
-  args:
-    chdir: '{{remote_bigtop_home}}'
-  become: True
-  register: puppetmodules_out
-- debug: 
-    var: puppetmodules_out.stdout_lines
-- debug: 
-    var: puppetmodules_out.stderr_lines  
-
 - name: Setup env on the machines
   ansible.builtin.command: '{{remote_bigtop_home}}/provisioner/utils/setup-env-{{env_setup_distro}}.sh {{use_local_repo}}'
   become: True
@@ -33,8 +22,8 @@
 - debug: 
     var: setupenv_out.stdout_lines
 - debug: 
-    var: setupenv_out.stderr_lines    
-    
+    var: setupenv_out.stderr_lines
+
 - name: RSYNC hiera.yaml to /etc/puppet
   ansible.posix.synchronize:
     src: '{{playbook_dir}}/config/hiera.yaml'
@@ -46,3 +35,15 @@
     src: '{{playbook_dir}}/config/hieradata/'
     dest: '{{remote_puppet_home}}/hieradata'
   become: True
+
+# - name: Install puppet modules
+#   ansible.builtin.command: './gradlew toolchain-puppetmodules'
+#   args:
+#     chdir: '{{remote_bigtop_home}}'
+#   become: True
+#   register: puppetmodules_out
+# - debug: 
+#     var: puppetmodules_out.stdout_lines
+# - debug: 
+#     var: puppetmodules_out.stderr_lines  
+      

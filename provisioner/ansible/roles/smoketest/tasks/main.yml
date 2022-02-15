@@ -1,9 +1,18 @@
 # Playbook that runs smoke test on the hadoop cluster
 
-# - name: Run smoke tests on the hadoop cluster components
-#   ansible.builtin.command: '/bigtop-home/provisioner/utils/smoke-tests.sh {{smoketest_components}}'
-#   become: True
-#   register: smoketest_out
+- name: Get smoke test components
+  set_fact:
+    smoketest_components_list: "{{smoketest_components | join(',')}}"
 
-# - debug : msg= smoketest_out.stdout_lines
-# - debug : msg= smoketest_out.stderr_lines
+- debug:
+    var: smoketest_components_list    
+
+- name: Run smoke tests on the hadoop cluster components
+  ansible.builtin.command: '/bigtop-home/provisioner/utils/smoke-tests.sh {{smoketest_components_list}}'
+  become: True
+  register: smoketest_out
+
+- debug:
+    var: smoketest_out.stdout_lines
+- debug: 
+    var: smoketest_out.stderr_lines

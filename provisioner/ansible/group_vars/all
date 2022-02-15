@@ -5,7 +5,7 @@ bigtop_home: "{{playbook_dir}}/../.."
 bigtop_puppet_home: "{{bigtop_home}}/bigtop-deploy/puppet"
 
 # Provisioning variables
-hadoop_head_node: hadoop-namenode.dm.local
+hadoop_head_node: hadoop-namenode.dm.local  #TODO: use host name from inventory
 hadoop_storage_dirs:
   - /data/1
   - /data/2
@@ -15,6 +15,8 @@ components:
   - hdfs
   - yarn
   - mapreduce
+  - ambari
+  - spark
 smoketest_components:
   - hdfs
   - yarn
