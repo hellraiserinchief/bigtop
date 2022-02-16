@@ -53,18 +53,7 @@
     src: '{{playbook_dir}}/config/hieradata/'
     dest: '{{remote_puppet_home}}/hieradata'
   become: True
-
-- name: Install puppet modules
-  ansible.builtin.command: './gradlew toolchain-puppetmodules'
-  args:
-    chdir: '{{remote_bigtop_home}}'
-  become: True
-  register: puppetmodules_out
-- debug: 
-    var: puppetmodules_out.stdout_lines
-- debug: 
-    var: puppetmodules_out.stderr_lines  
-      
+    
 - name: Reboot all machines to pick up hostname changes
   reboot:
     reboot_timeout: 120 # 2 minutes
