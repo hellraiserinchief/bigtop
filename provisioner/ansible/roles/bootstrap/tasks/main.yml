@@ -1,4 +1,4 @@
-Playbook for bootstraping the hadoop cluster nodes
+# Playbook for bootstraping the hadoop cluster nodes
 
 - name: RSYNC Bigtop home directory to /bigtop-home
   ansible.posix.synchronize:
@@ -24,8 +24,13 @@ Playbook for bootstraping the hadoop cluster nodes
 - debug: 
     var: setupenv_out.stderr_lines
 
+- name: Check if we need to update /etc/cloud/templates/hosts.debian.tmpl
+  ansible.builtin.command: "grep 127.0.0.1 /etc/cloud/templates/hosts.debian.tmpl"
+  become: True
+  register: update_hosts_tpl
+
 - name: Update /etc/hosts template /etc/cloud/templates/hosts.debian.tmpl
-  become: yes
+  become: True
   lineinfile:
     path: "/etc/cloud/templates/hosts.debian.tmpl"
     search_string: "127.0.1.1"
@@ -35,6 +40,7 @@ Playbook for bootstraping the hadoop cluster nodes
     insertbefore: "127.0.0.1 localhost"
     firstmatch: yes
   with_items: "{{groups['allnodes']}}"
+  when: update_hosts_tpl.rc == 0
 
 - name: RSYNC hiera.yaml to /etc/puppet
   ansible.posix.synchronize:
@@ -61,4 +67,5 @@ Playbook for bootstraping the hadoop cluster nodes
       
 - name: Reboot all machines to pick up hostname changes
   reboot:
-    reboot_timeout: 60 # 60 seconds      
+    reboot_timeout: 120 # 2 minutes
+  become: True        
