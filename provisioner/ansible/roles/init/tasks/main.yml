@@ -1,30 +1,51 @@
-# Playbook for initializing the configs
+# Playbook to initialize the ssh keys etc
 
-- name: Create config directory
-  ansible.builtin.file:
-    path: '{{playbook_dir}}/config'
-    state: directory
-    mode: '0755'
-
-- name: Copy hiera.yaml
-  ansible.builtin.copy:
-    src: '{{bigtop_puppet_home}}/hiera.yaml'
-    dest: '{{playbook_dir}}/config/hiera.yaml'   
-
-- name: Copy hieradata
-  ansible.builtin.copy:
-    src: '{{bigtop_puppet_home}}/hieradata'
-    dest: '{{playbook_dir}}/config/'
-
-- name: Get list of allnodes
-  set_fact:
-    node_list: "{{node_list + [ item ] }}"
+- name: Delete mentions to the Hostnames of the cluster nodes in known_hosts
+  ansible.builtin.known_hosts:
+    name: "{{item}}"
+    state: absent
   with_items: "{{groups['allnodes']}}"
 
-- debug:
-    var: node_list
+- name: Add mentions to the Hostnames of the cluster nodes in known_hosts
+  ansible.builtin.command: "ssh-keyscan -H {{item}}"
+  register: key
+  with_items: "{{groups['allnodes']}}"   
 
-- name: Template site.yml for hieradata
-  ansible.builtin.template:
-    src: '{{role_path}}/templates/site.tpl'
-    dest: '{{playbook_dir}}/config/hieradata/site.yaml'
+- name: Add mentions to the Hostnames of the cluster nodes in known_hosts
+  ansible.builtin.known_hosts:
+    name: "{{item.item}}"
+    key: "{{item.stdout}}"
+    state: present
+  with_items: "{{key.results}}"     
+
+
+# - name: Lookup IP addresses
+#   debug:
+#     msg: "{{ lookup('community.general.dig', '{{item}}')}}"
+#   with_items: "{{groups['allnodes']}}"    
+
+# - name: Delete mentions to the IP of the cluster nodes in known_hosts
+#   ansible.builtin.known_hosts:
+#     name: "{{ lookup('community.general.dig', '{{item}}')}}"
+#     state: absent
+#   with_items: "{{groups['allnodes']}}"  
+
+# - name: Fetch keys for IPs/Hostnames of the cluster nodes in known_hosts
+#   tags: "never,sshkeys"
+#   ansible.builtin.command: "ssh-keyscan -H {{ip_addr}}"
+#   register: key
+#   ansible.builtin.known_hosts:
+#     name: "{{item}}"
+#     key: "{{key}}"
+#     state: present
+#   with_items: "{{groups['allnodes']}}"
+
+# - debug:
+#     var: "ip_addr"
+#   with_items: "{{groups['allnodes']}}"    
+
+# - debug:
+#     var: ip_addr
+#   with_items: "{{groups['allnodes']}}"     
+
+

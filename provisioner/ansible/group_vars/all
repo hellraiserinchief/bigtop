@@ -8,7 +8,7 @@ bigtop_puppet_home: "{{bigtop_home}}/bigtop-deploy/puppet"
 hadoop_head_node: hadoop-namenode.dm.local  #TODO: use host name from inventory
 hadoop_storage_dirs:
   - /data/1
-  - /data/2
+#  - /data/2
 bigtop_repo_gpg_check: False
 repo_uri: "http://repos.bigtop.apache.org/releases/3.0.0/ubuntu/20.04/$(ARCH)"
 components:
@@ -21,6 +21,7 @@ smoketest_components:
   - hdfs
   - yarn
   - mapreduce
+  - spark
 env_setup_distro: debian
 use_local_repo: 'false' # checked against value = true in env-setup-{env_setup_distro}.sh
 

@@ -5,12 +5,18 @@
   gather_facts: yes
   roles:
   - role: init
+    tags: [ never ]
+  - role: config
+    tags: [ config ]
   
 - hosts: allnodes
   roles:
   - role: bootstrap
+    tags: [ bootstrap ]
   - role: provision
+    tags: [ provision ]
 
-# - hosts: allnodes
-#   roles:
-#   - role: smoketest
+- hosts: namenodes
+  tags: test
+  roles:
+  - role: smoketest

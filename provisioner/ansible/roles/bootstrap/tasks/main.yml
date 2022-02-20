@@ -4,6 +4,8 @@
   ansible.posix.synchronize:
     src: '{{bigtop_home}}/'
     dest: '{{remote_bigtop_home}}'
+    delete: True
+    recursive: True
   become: True
 
 - name: Puppetize the machines
@@ -52,6 +54,8 @@
   ansible.posix.synchronize:
     src: '{{playbook_dir}}/config/hieradata/'
     dest: '{{remote_puppet_home}}/hieradata'
+    delete: True
+    recursive: True
   become: True
     
 - name: Reboot all machines to pick up hostname changes

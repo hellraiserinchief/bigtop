@@ -1,0 +1,36 @@
+# Playbook for initializing the configs
+
+- name: Delete config directory
+  ansible.builtin.file:
+    path: '{{playbook_dir}}/config'
+    state: absent
+    mode: '0755'
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: '{{playbook_dir}}/config'
+    state: directory
+    mode: '0755'
+
+- name: Copy hiera.yaml
+  ansible.builtin.copy:
+    src: '{{bigtop_puppet_home}}/hiera.yaml'
+    dest: '{{playbook_dir}}/config/hiera.yaml'   
+
+- name: Copy hieradata
+  ansible.builtin.copy:
+    src: '{{bigtop_puppet_home}}/hieradata'
+    dest: '{{playbook_dir}}/config/'
+
+- name: Get list of allnodes
+  set_fact:
+    node_list: "{{node_list + [ item ] }}"
+  with_items: "{{groups['allnodes']}}"
+
+- debug:
+    var: node_list
+
+- name: Template site.yml for hieradata
+  ansible.builtin.template:
+    src: '{{role_path}}/templates/site.tpl'
+    dest: '{{playbook_dir}}/config/hieradata/site.yaml'

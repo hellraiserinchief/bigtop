@@ -16,3 +16,20 @@
     var: smoketest_out.stdout_lines
 - debug: 
     var: smoketest_out.stderr_lines
+
+# - name: Calculate test location
+#   set_fact:
+#     test_loc: "/bigtop-home/bigtop-tests/smoke-tests/{{item}}/build/reports/tests/test/"
+#   register: test_dir
+#   with_items: "{{smoketest_components}}"
+
+# - debug:
+#     var: test_loc
+# - debug:
+#     var: test_dir    
+# - name: Fetch smoketest results
+#   ansible.builtin.fetch:
+#     src: "{{item.ansible_facts.test_loc}}"
+#     dest: "{{playbook_dir}}/smoke-tests/{{item.item}}"
+#     flat: true
+#   with_items: "{{test_dir.results}}"

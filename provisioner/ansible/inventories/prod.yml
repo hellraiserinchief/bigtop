@@ -8,6 +8,7 @@ all:
 admin:
   hosts:
     admin-srv-1.dm.local:
+      ansible_connection: local
 
 allnodes:
   children:
@@ -22,6 +23,7 @@ datanodes:
   hosts:
     hadoop-datanode-1.dm.local:
     hadoop-datanode-2.dm.local:
+    hadoop-datanode-3.dm.local:
 
 # [admin]
 # 99.99.1.2
